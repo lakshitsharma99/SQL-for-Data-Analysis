@@ -18,15 +18,14 @@ SQL topics covered:
 → SUBQUERIES
 → VIEWS
     
-I'm using 'employees' database for this analysis which contain 8 tables. 
+I'm using 'employees' database for this analysis which contain 7 tables. 
 
-# To find out how many tables this database have:
+# To find out how many tables this database have
 mysql> show tables;
 +----------------------+
 | Tables_in_employees  |
 +----------------------+
 | departments          |
-| departments_dup      |
 | dept_emp             |
 | dept_manager         |
 | emp_manager          |
@@ -35,7 +34,7 @@ mysql> show tables;
 | titles               |
 +----------------------+
 
-This is the preview of all tables:
+Let' extract some rows of datasets-
 
 mysql> select * from employees limit 5;
 +--------+------------+------------+-----------+--------+------------+
@@ -125,12 +124,9 @@ mysql> select * from departments limit 5;
 # Let's run USE statement to select this database in the SQL schema
 use employees; 
 
-select * from employees;
-select * from salaries;
+# Let's try to answer some questions about our data.
 
-select e.*, e.first_name, e.last_name, s.salary from employees e left join salaries s on e.emp_no = s.emp_no where e.hire_date = s.from_date order by e.emp_no;
-
-/*Extract a list containing information about all managers’ employee number, first and last name, department number, and hire date. */
+-- Extract a list containing information about all managers’ employee number, first and last name, department number, and hire date. 
 
 SELECT 
     e.emp_no, e.first_name, e.last_name, d.dept_no, e.hire_date
@@ -138,4 +134,5 @@ FROM
     employees e
         INNER JOIN
     dept_manager d ON e.emp_no = d.emp_no;
+
 
