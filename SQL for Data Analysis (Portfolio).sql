@@ -134,5 +134,9 @@ FROM
     employees e
         INNER JOIN
     dept_manager d ON e.emp_no = d.emp_no;
+    
+-- Join the 'employees' and the 'dept_manager' tables to return a subset of all the employees whose last name is Markovitch. See if the output contains a manager with that name.  
+
+
 
 
