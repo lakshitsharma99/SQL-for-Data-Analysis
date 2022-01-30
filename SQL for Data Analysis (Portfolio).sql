@@ -17,6 +17,24 @@
 	→ FUNCTIONS
 	→ SUBQUERIES
 	→ VIEWS
+    
+    mysql> use employees;
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_employees  |
++----------------------+
+| departments          |
+| departments_dup      |
+| dept_emp             |
+| dept_manager         |
+| emp_manager          |
+| employees            |
+| salaries             |
+| titles               |
++----------------------+
+    
+
 */
 
 use employees; #database
