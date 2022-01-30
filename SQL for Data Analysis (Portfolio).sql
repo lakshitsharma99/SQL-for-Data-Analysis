@@ -1,5 +1,21 @@
-/* Exploratory Data Analysis (EDA) in Python using SQL and Seaborn (SNS) Exploratory Data Analysis (EDA) is an approach of analyzing datasets to summarize their main characteristics,
-   often using statistical graphics and other data visualization methods.*/
+/* 
+	Data Exploration using SQL
+    
+	Tools & Language: MySQL Workbench, SQL
+    
+    SQL topics covered:
+    → DIFFERENT JOINS
+    → AGGREGATION FUNCTIONS
+    → GROUP BY CLAUSE
+	→ WHERE CLAUSE
+    → HAVING CLAUSE    
+	→ ORDER BY CLAUSE
+    → CTE
+	→ STORED PROCEDURES
+    → FUNCTIONS
+	→ SUBQUERIES
+    → VIEWS
+*/
 
 use employees; #database
 
