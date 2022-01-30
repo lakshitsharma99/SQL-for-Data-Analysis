@@ -3,7 +3,7 @@
     
 	Tools & Language: MySQL Workbench, SQL
     
-    SQL topics covered:
+	SQL topics covered:
 	→ DIFFERENT JOINS
 	→ AGGREGATION FUNCTIONS
 	→ GROUP BY CLAUSE
