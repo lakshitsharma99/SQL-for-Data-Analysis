@@ -4,17 +4,17 @@
 	Tools & Language: MySQL Workbench, SQL
     
     SQL topics covered:
-    → DIFFERENT JOINS
-    → AGGREGATION FUNCTIONS
+	→ DIFFERENT JOINS
+	→ AGGREGATION FUNCTIONS
 	→ GROUP BY CLAUSE
 	→ WHERE CLAUSE
-    → HAVING CLAUSE    
+	→ HAVING CLAUSE    
 	→ ORDER BY CLAUSE
-    → CTE
+	→ CTE
 	→ STORED PROCEDURES
-    → FUNCTIONS
+	→ FUNCTIONS
 	→ SUBQUERIES
-    → VIEWS
+	→ VIEWS
 */
 
 use employees; #database
