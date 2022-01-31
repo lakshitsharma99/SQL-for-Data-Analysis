@@ -202,6 +202,103 @@ FROM
 WHERE
     t.title = 'Manager' order by d.dept_name;
 
+-- Extract the information about all department managers who were hired between the 1st of January 1990 and the 1st of January 1995.
+
+SELECT 
+    e.*
+FROM
+    employees e
+WHERE
+    e.hire_date BETWEEN '1990-01-01' AND '1995-01-01'
+        AND e.emp_no IN (SELECT 
+            d.emp_no
+        FROM
+            dept_manager d);
+            
+-- Select the entire information for all employees whose job title is “Assistant Engineer”. 
+
+SELECT 
+    e.*
+FROM
+    employees e
+WHERE
+    EXISTS( SELECT 
+            *
+        FROM
+            titles t
+        WHERE
+            t.emp_no = e.emp_no
+                AND title = 'Assistant Engineer');
+                
+-- Assign employee number 110022 as a manager to all employees from 10001 to 10020, and employee number 110039 as a manager to all employees from 10021 to 10040.
+
+SELECT 
+    A.*
+FROM
+    (SELECT 
+        e.emp_no,
+            d.dept_no,
+            (SELECT 
+                    emp_no
+                FROM
+                    dept_manager
+                WHERE
+                    emp_no = 110022) AS manager
+    FROM
+        employees e
+    JOIN dept_emp d ON e.emp_no = d.emp_no
+    WHERE
+        e.emp_no <= 10020
+    GROUP BY e.emp_no
+    ORDER BY e.emp_no , d.dept_no) AS A 
+UNION SELECT 
+    B.*
+FROM
+    (SELECT 
+        e.emp_no,
+            d.dept_no,
+            (SELECT 
+                    emp_no
+                FROM
+                    dept_manager
+                WHERE
+                    emp_no = 110039) AS manager
+    FROM
+        employees e
+    JOIN dept_emp d ON e.emp_no = d.emp_no
+    WHERE
+        e.emp_no BETWEEN 10021 AND 10040
+    GROUP BY e.emp_no
+    ORDER BY e.emp_no , d.dept_no) AS B;
+    
+-- Create a view that will extract the average salary of all managers registered in the database. Round this value to the nearest cent.
+
+CREATE OR REPLACE VIEW avg_manager_sal AS
+    SELECT 
+        AVG(s.salary)
+    FROM
+        salaries s
+            JOIN
+        dept_manager d ON s.emp_no = d.emp_no;
+
+-- Create a procedure that will provide the average salary of all employees
+
+DELIMITER $$
+CREATE PROCEDURE avg_sal()
+BEGIN
+SELECT 
+    AVG(salary) as Average_Salary
+FROM
+    salaries;
+END $$
+DELIMITER ;
+
+# To execute this procedure
+call avg_sal();
+
+
+
+
 
 
 
