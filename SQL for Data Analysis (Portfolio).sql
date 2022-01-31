@@ -296,6 +296,64 @@ DELIMITER ;
 # To execute this procedure
 call avg_sal();
 
+delimiter $$
+create procedure info(in emp_no_n integer, out res varchar(20))
+begin
+select first_name into res from employees where emp_no = emp_no_n;
+end $$
+delimiter ;
+
+drop procedure info;
+call info('10002');
+
+select * from employees limit 1;
+
+-- Create a procedure called ‘emp_info’ that uses as parameters the first and the last name of an individual, and returns their employee number.
+
+delimiter $$
+create procedure emp_info(in fn varchar(30), out en varchar(30))
+begin
+select emp_no into en from employees where first_name = fn;
+end $$
+delimiter ;
+drop procedure emp_info;
+
+DELIMITER $$
+
+CREATE PROCEDURE emp_info(in p_first_name varchar(255), in p_last_name varchar(255), out p_emp_no integer)
+
+BEGIN
+
+                SELECT
+
+                                e.emp_no
+
+                INTO p_emp_no FROM
+
+                                employees e
+
+                WHERE
+
+                                e.first_name = p_first_name
+
+                                                AND e.last_name = p_last_name;
+
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
