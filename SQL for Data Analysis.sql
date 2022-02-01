@@ -137,6 +137,228 @@ FROM
     
 -- Join the 'employees' and the 'dept_manager' tables to return a subset of all the employees whose last name is Markovitch. See if the output contains a manager with that name.  
 
+SELECT 
+    e.emp_no, e.first_name, e.last_name, d.dept_no, d.from_date
+FROM
+    employees e
+        LEFT JOIN
+    dept_manager d ON e.emp_no = d.emp_no
+WHERE
+    e.last_name = 'Markovitch'
+ORDER BY d.dept_no DESC;
 
+-- Select the first and last name, the hire date, and the job title of all employees whose first name is “Margareta” and have the last name “Markovitch”.
 
+SELECT 
+    e.first_name, e.last_name, e.hire_date, t.title
+FROM
+    employees e
+        JOIN
+    titles t ON e.emp_no = t.emp_no
+WHERE
+    e.first_name = 'Margareta'
+        AND e.last_name = 'Markovitch';
+        
+-- Use a CROSS JOIN to return a list with all possible combinations between managers from the dept_manager table and department number 9.
 
+SELECT 
+    dm.*, d.*
+FROM
+    dept_manager dm
+        CROSS JOIN
+    departments d
+WHERE
+    d.dept_no = 'd009';
+    
+-- Return a list with the first 10 employees with all the departments they can be assigned to.
+
+SELECT 
+    e.*, d.*
+FROM
+    employees e
+        CROSS JOIN
+    departments d
+WHERE
+    e.emp_no <= 10010
+ORDER BY e.emp_no , d.dept_no;
+
+-- Select all managers’ first and last name, hire date, job title, start date, and department name.
+
+SELECT 
+    e.first_name,
+    e.last_name,
+    e.hire_date,
+    t.title,
+    dm.from_date,
+    d.dept_name
+FROM
+    employees e
+        JOIN
+    titles t ON e.emp_no = t.emp_no
+        JOIN
+    dept_manager dm ON dm.emp_no = e.emp_no
+        JOIN
+    departments d ON d.dept_no = dm.dept_no
+WHERE
+    t.title = 'Manager' order by d.dept_name;
+
+-- Extract the information about all department managers who were hired between the 1st of January 1990 and the 1st of January 1995.
+
+SELECT 
+    e.*
+FROM
+    employees e
+WHERE
+    e.hire_date BETWEEN '1990-01-01' AND '1995-01-01'
+        AND e.emp_no IN (SELECT 
+            d.emp_no
+        FROM
+            dept_manager d);
+            
+-- Select the entire information for all employees whose job title is “Assistant Engineer”. 
+
+SELECT 
+    e.*
+FROM
+    employees e
+WHERE
+    EXISTS( SELECT 
+            *
+        FROM
+            titles t
+        WHERE
+            t.emp_no = e.emp_no
+                AND title = 'Assistant Engineer');
+                
+-- Assign employee number 110022 as a manager to all employees from 10001 to 10020, and employee number 110039 as a manager to all employees from 10021 to 10040.
+
+SELECT 
+    A.*
+FROM
+    (SELECT 
+        e.emp_no,
+            d.dept_no,
+            (SELECT 
+                    emp_no
+                FROM
+                    dept_manager
+                WHERE
+                    emp_no = 110022) AS manager
+    FROM
+        employees e
+    JOIN dept_emp d ON e.emp_no = d.emp_no
+    WHERE
+        e.emp_no <= 10020
+    GROUP BY e.emp_no
+    ORDER BY e.emp_no , d.dept_no) AS A 
+UNION SELECT 
+    B.*
+FROM
+    (SELECT 
+        e.emp_no,
+            d.dept_no,
+            (SELECT 
+                    emp_no
+                FROM
+                    dept_manager
+                WHERE
+                    emp_no = 110039) AS manager
+    FROM
+        employees e
+    JOIN dept_emp d ON e.emp_no = d.emp_no
+    WHERE
+        e.emp_no BETWEEN 10021 AND 10040
+    GROUP BY e.emp_no
+    ORDER BY e.emp_no , d.dept_no) AS B;
+    
+-- Create a view that will extract the average salary of all managers registered in the database. Round this value to the nearest cent.
+
+CREATE OR REPLACE VIEW avg_manager_sal AS
+    SELECT 
+        AVG(s.salary)
+    FROM
+        salaries s
+            JOIN
+        dept_manager d ON s.emp_no = d.emp_no;
+
+-- Create a procedure that will provide the average salary of all employees
+
+DELIMITER $$
+CREATE PROCEDURE avg_sal()
+BEGIN
+SELECT 
+    AVG(salary) as Average_Salary
+FROM
+    salaries;
+END $$
+DELIMITER ;
+
+# To execute this procedure
+call avg_sal();
+
+delimiter $$
+create procedure info(in emp_no_n integer, out res varchar(20))
+begin
+select first_name into res from employees where emp_no = emp_no_n;
+end $$
+delimiter ;
+
+drop procedure info;
+call info('10002');
+
+select * from employees limit 1;
+select round(avg(salary)) from salaries where emp_no = 10001;
+
+-- Create a procedure called ‘emp_salary_info that uses as parameters the employee ID of an individual, and returns Full Name and their average Salary.
+
+DELIMITER $$
+create procedure emp_salary_info(in ID integer, out First_Name varchar(30), out Last_Name varchar(30), out Average_Salary integer)
+begin
+SELECT 
+    e.first_name, e.last_name, AVG(s.salary)
+INTO First_Name , Last_Name , Average_Salary FROM
+    employees e
+        JOIN
+    salaries s ON e.emp_no = s.emp_no
+WHERE
+    e.emp_no = ID;
+end $$
+DELIMITER ;
+
+drop function emp_info;
+
+-- Create a function called ‘emp_info’ that takes for parameters the first and last name of an employee, and returns the salary from the newest contract of that employee.
+
+DELIMITER $$
+CREATE FUNCTION emp_info(First_Name varchar(30), Last_Name varchar(30)) returns decimal(10,2)
+DETERMINISTIC NO SQL READS SQL DATA
+begin
+declare new_sal decimal(10,2);
+
+select max(s.salary) into new_sal from employees e join salaries s on e.emp_no = s.emp_no
+where e.first_name = First_Name and e.last_name = Last_Name;
+
+return new_sal;
+end $$
+DELIMITER ;
+
+delimiter $$
+create function sal_info(id integer) returns decimal(10,2)
+DETERMINISTIC NO SQL READS SQL DATA
+
+begin
+declare avg_sall decimal(10,2);
+select avg(s.salary) into avg_sall from employees e join salaries s on e.emp_no = s.emp_no where e.emp_no = id;
+return avg_sall;
+end $$ 
+
+delimiter ;
+ 
+ -- Select all records from the ‘salaries’ table of people whose salary is higher than $89,000 per annum.
+ -- Then, create an index on the ‘salary’ column of that table, and check if it has sped up the search of the same SELECT statement.
+
+select e.first_name, e.last_name, avg(s.salary) as avg_sal from employees e join
+ salaries s on e.emp_no = s.emp_no group by e.emp_no having avg(s.salary) > 50000 order by avg_sal desc;
+ 
+ create index fn_ln_en on employees (emp_no, first_name, last_name);
+ 
