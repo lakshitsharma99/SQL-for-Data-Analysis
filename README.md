@@ -1,9 +1,9 @@
 ## SQL for Data Analysis
 
-Data Exploration using SQL. Check out the analysis at: <a href="https://github.com/lakshitsharma99/SQL-for-Data-Analysis/blob/main/SQL%20for%20Data%20Analysis.sql">Jupyter Notebook</a> (Best View in Desktop Mode)
+Data Exploration using SQL. Check out the analysis at: <a href="https://github.com/lakshitsharma99/SQL-for-Data-Analysis/blob/main/SQL%20for%20Data%20Analysis.sql">MySQL Workbench file</a> (Best View in Desktop Mode)
 
 
-## Modules covered:
+## Topics covered:
 
 * JOINS, GROUP BY, HAVING, SUBQUERIES, VIEWS, PROCEDURES, FUNCTIONS, ORDER BY, CTE, AGGREGATION FUNCTIONS, WINDOW FUNCTIONS, etc.
 * SQL, MySQL Workbench 
