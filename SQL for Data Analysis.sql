@@ -124,7 +124,42 @@ mysql> select * from departments limit 5; # departments table
 # Let's run USE statement to select this database in the SQL schema
 use employees; 
 
-# Let's try to answer some questions about our data.    
+# Let's try to answer some questions about our data.   
+
+-- What is the salary of 'Assistant Engineer', 'Engineer' and 'Senior Engineer'
+
+SELECT 
+    t.title, s.salary
+FROM
+    salaries s
+        JOIN
+    titles t ON s.emp_no = t.emp_no
+WHERE
+    t.title IN ('Assistant Engineer' , 'Engineer', 'Senior Engineer')
+GROUP BY t.title
+ORDER BY t.title; 
+
+-- Create a procedure that take department no. as input and return department name and numbers of employees of that department
+
+DELIMITER $$
+CREATE PROCEDURE dept_info(IN Dept_No VARCHAR(10), out Dept_Name VARCHAR(50), out Total_Employees INTEGER)
+BEGIN
+SELECT 
+    d.dept_no, d.dept_name, COUNT(de.dept_no) AS total_employee
+    INTO Dept_No, Dept_Name, Total_Employees
+FROM
+    dept_emp de
+        JOIN
+    departments d ON de.dept_no = d.dept_no
+    where d.dept_no = Dept_no
+GROUP BY de.dept_no
+ORDER BY d.dept_no;
+END $$
+DELIMITER ;
+
+-- To execute the procedure dept_info
+
+CALL dept_info('d009', @Dept_Name, @Total_Employees); select @Dept_Name, @Total_Employees;
 
 -- Select the first and last name, the hire date, and the job title of all employees whose first name is “Margareta” and have the last name “Markovitch”.
 
@@ -171,7 +206,7 @@ WHERE
             d.emp_no
         FROM
             dept_manager d);
-            
+      
 -- Select the entire information for all employees whose job title is “Assistant Engineer”. 
 
 SELECT 
@@ -213,11 +248,15 @@ FROM
 
 CREATE OR REPLACE VIEW avg_manager_sal AS
     SELECT 
-        AVG(s.salary)
+        t.title, ROUND(AVG(s.salary), 2)
     FROM
         salaries s
             JOIN
-        dept_manager d ON s.emp_no = d.emp_no;
+        dept_manager d ON s.emp_no = d.emp_no
+            JOIN
+        titles t ON t.emp_no = d.emp_no
+    WHERE
+        t.title = 'Manager';
         
 -- Call the View avg_manager_sal
 
@@ -226,48 +265,37 @@ SELECT
 FROM
     avg_manager_sal;
 
--- Create a procedure that will provide the average salary of all employees
+-- Create a procedure called ‘emp_info that uses as parameters the employee ID of an individual, and returns Full Name, Title and their average Salary.
 
 DELIMITER $$
-CREATE PROCEDURE avg_sal()
+CREATE PROCEDURE emp_info(IN ID INTEGER, OUT First_Name VARCHAR(30), OUT Last_Name VARCHAR(30), OUT Title VARCHAR(30), OUT Average_Salary INTEGER)
 BEGIN
 SELECT 
-    AVG(salary) as Average_Salary
-FROM
-    salaries;
-END $$
-DELIMITER ;
-
--- Create a procedure called ‘emp_salary_info that uses as parameters the employee ID of an individual, and returns Full Name and their average Salary.
-
-DELIMITER $$
-create procedure emp_salary_info(in ID integer, out First_Name varchar(30), out Last_Name varchar(30), out Average_Salary integer)
-begin
-SELECT 
-    e.first_name, e.last_name, AVG(s.salary)
-INTO First_Name , Last_Name , Average_Salary FROM
+    e.first_name, e.last_name, t.title, AVG(s.salary)
+INTO First_Name , Last_Name , Title, Average_Salary FROM
     employees e
         JOIN
     salaries s ON e.emp_no = s.emp_no
+		JOIN
+    titles t ON t.emp_no = s.emp_no
 WHERE
     e.emp_no = ID;
-end $$
+END $$
 DELIMITER ;
 
--- Call this procedure emp_salary_info
-call employees.emp_salary_info(10002, @First_Name, @Last_Name, @Average_Salary);
+-- Call this procedure emp_info
+CALL employees.emp_info(10002, @First_Name, @Last_Name, @Title, @Average_Salary);
+SELECT @First_Name, @Last_Name, @Title, @Average_Salary;
 
--- Create a function called ‘emp_info’ that takes for parameters the first and last name of an employee, and returns the salary from the newest contract of that employee.
+-- Create a function called ‘salary_info’ that takes for parameters the first and last name of an employee, and returns the salary from the newest contract of that employee.
 
 DELIMITER $$
-
-CREATE FUNCTION emp_info(First_Name VARCHAR(30), Last_Name VARCHAR(30)) returns DECIMAL(10,2)
+CREATE FUNCTION salary_info(First_Name VARCHAR(30), Last_Name VARCHAR(30)) returns DECIMAL(10,2)
 DETERMINISTIC NO SQL READS SQL DATA
-
 BEGIN
 DECLARE new_sal DECIMAL(10,2);
 SELECT 
-    MAX(s.salary)
+    AVG(s.salary)
 INTO new_sal FROM
     employees e
         JOIN
@@ -275,12 +303,12 @@ INTO new_sal FROM
 WHERE
     e.first_name = First_Name
         AND e.last_name = Last_Name;
-return new_sal;
-end $$
+RETURN new_sal;
+END $$
 DELIMITER ;
 
 -- Call the function emp_info
-SELECT emp_info("Georgi", "Facello");
+SELECT salary_info("Georgi", "Facello");
 
 -- Select first name, last name and average salary of people whose average salary is higher than $50,000 per annum.
 -- Then, create an index on the ‘salary’ column of that table, and check if it has sped up the search of the same SELECT statement.
@@ -298,8 +326,11 @@ GROUP BY e.emp_no
 HAVING AVG(s.salary) > 50000
 ORDER BY e.emp_no;
  
- create index fn_ln_en on employees (emp_no, first_name, last_name);
- 
-select * from dept_manager;
-select * from dept_emp;
-select * from employees;
+create index fn_ln_en on employees (emp_no, first_name, last_name);
+
+
+
+
+
+
+
