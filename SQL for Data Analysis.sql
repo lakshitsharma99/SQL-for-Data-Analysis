@@ -6,21 +6,22 @@ Tools & Language: MySQL Workbench, SQL
 SQL topics covered:
 → BASIC SQL QUERIES
 → JOINS
-→ AGGREGATION FUNCTIONS
-→ GROUP BY CLAUSE
-→ WHERE CLAUSE
-→ HAVING CLAUSE    
-→ ORDER BY CLAUSE
-→ CTE
-→ WINDOW FUNCTIONS
-→ STORED PROCEDURES
-→ FUNCTIONS
 → SUBQUERIES
 → VIEWS
-    
+→ GROUP BY CLAUSE
+→ WHERE CLAUSE
+→ INDEXES
+→ HAVING CLAUSE    
+→ ORDER BY CLAUSE
+→ STORED PROCEDURES
+→ FUNCTIONS
+→ AGGREGATION FUNCTIONS
+→ CTE
+→ WINDOW FUNCTIONS
+
 I'm using 'employees' database for this analysis which contain 7 tables. 
 
-# To find out how many tables this database have
+# To find out how many tables this database have, let's run show tables command
 mysql> show tables;
 +----------------------+
 | Tables_in_employees  |
@@ -35,8 +36,7 @@ mysql> show tables;
 +----------------------+
 
 Let' extract some rows of datasets-
-
-mysql> select * from employees limit 5;
+mysql> select * from employees limit 5; # employees table
 +--------+------------+------------+-----------+--------+------------+
 | emp_no | birth_date | first_name | last_name | gender | hire_date  |
 +--------+------------+------------+-----------+--------+------------+
@@ -48,7 +48,7 @@ mysql> select * from employees limit 5;
 +--------+------------+------------+-----------+--------+------------+
 5 rows in set (0.01 sec)
 
-mysql> select * from salaries limit 5;
+mysql> select * from salaries limit 5; # salaries table
 +--------+--------+------------+------------+
 | emp_no | salary | from_date  | to_date    |
 +--------+--------+------------+------------+
@@ -60,7 +60,7 @@ mysql> select * from salaries limit 5;
 +--------+--------+------------+------------+
 5 rows in set (0.01 sec)
 
-mysql> select * from titles limit 5;
+mysql> select * from titles limit 5; # titles table
 +--------+-----------------+------------+------------+
 | emp_no | title           | from_date  | to_date    |
 +--------+-----------------+------------+------------+
@@ -72,7 +72,7 @@ mysql> select * from titles limit 5;
 +--------+-----------------+------------+------------+
 5 rows in set (0.03 sec)
 
-mysql> select * from emp_manager limit 5;			
+mysql> select * from emp_manager limit 5; # emp_manager table		
 +--------+---------+------------+
 | emp_no | dept_no | manager_no |
 +--------+---------+------------+
@@ -84,7 +84,7 @@ mysql> select * from emp_manager limit 5;
 +--------+---------+------------+
 5 rows in set (0.02 sec)
 
-mysql> select * from dept_manager limit 5;
+mysql> select * from dept_manager limit 5; # dept_manager table
 +--------+---------+------------+------------+
 | emp_no | dept_no | from_date  | to_date    |
 +--------+---------+------------+------------+
@@ -96,7 +96,7 @@ mysql> select * from dept_manager limit 5;
 +--------+---------+------------+------------+
 5 rows in set (0.00 sec)
 
-mysql> select * from dept_emp limit 5;
+mysql> select * from dept_emp limit 5; # dept_emp table
 +--------+---------+------------+------------+
 | emp_no | dept_no | from_date  | to_date    |
 +--------+---------+------------+------------+
@@ -108,7 +108,7 @@ mysql> select * from dept_emp limit 5;
 +--------+---------+------------+------------+
 5 rows in set (0.00 sec)
 
-mysql> select * from departments limit 5;
+mysql> select * from departments limit 5; # departments table
 +---------+------------------+
 | dept_no | dept_name        |
 +---------+------------------+
@@ -300,4 +300,6 @@ ORDER BY e.emp_no;
  
  create index fn_ln_en on employees (emp_no, first_name, last_name);
  
-
+select * from dept_manager;
+select * from dept_emp;
+select * from employees;
