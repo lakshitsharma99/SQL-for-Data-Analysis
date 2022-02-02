@@ -265,10 +265,8 @@ CREATE FUNCTION emp_info(First_Name VARCHAR(30), Last_Name VARCHAR(30)) returns 
 DETERMINISTIC NO SQL READS SQL DATA
 
 BEGIN
-
 DECLARE new_sal DECIMAL(10,2);
-
- SELECT 
+SELECT 
     MAX(s.salary)
 INTO new_sal FROM
     employees e
@@ -277,11 +275,8 @@ INTO new_sal FROM
 WHERE
     e.first_name = First_Name
         AND e.last_name = Last_Name;
-        
 return new_sal;
-
 end $$
-
 DELIMITER ;
 
 -- Call the function emp_info
@@ -305,3 +300,4 @@ ORDER BY e.emp_no;
  
  create index fn_ln_en on employees (emp_no, first_name, last_name);
  
+
