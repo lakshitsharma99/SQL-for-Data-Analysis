@@ -287,7 +287,7 @@ DELIMITER ;
 CALL employees.emp_info(10002, @First_Name, @Last_Name, @Title, @Average_Salary);
 SELECT @First_Name, @Last_Name, @Title, @Average_Salary;
 
--- Create a function called ‘salary_info’ that takes for parameters the first and last name of an employee, and returns the salary from the newest contract of that employee.
+-- Create a function called ‘salary_info’ that takes for parameters the first and last name of an employee, and returns the salary of that employee.
 
 DELIMITER $$
 CREATE FUNCTION salary_info(First_Name VARCHAR(30), Last_Name VARCHAR(30)) returns DECIMAL(10,2)
