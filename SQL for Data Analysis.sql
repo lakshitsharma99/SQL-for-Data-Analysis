@@ -362,6 +362,21 @@ CREATE OR REPLACE VIEW title_info AS
 
 SELECT * FROM TITLE_INFO;
 
+SELECT 
+    s.emp_no, ROUND(AVG(s.salary), 2) AS salary, t.title
+FROM
+    salaries s
+        JOIN
+    titles t ON s.emp_no = t.emp_no
+WHERE
+    s.emp_no IN (SELECT 
+            e.emp_no
+        FROM
+            employees e
+        WHERE
+            e.emp_no IN ('10001' , '10002'))
+GROUP BY s.emp_no;
+
 
 
 
