@@ -311,7 +311,6 @@ DELIMITER ;
 SELECT salary_info("Georgi", "Facello");
 
 -- Select first name, last name and average salary of people whose average salary is higher than $50,000 per annum.
--- Then, create an index on the ‘salary’ column of that table, and check if it has sped up the search of the same SELECT statement.
 
 SELECT 
     e.emp_no,
@@ -326,8 +325,42 @@ GROUP BY e.emp_no
 HAVING AVG(s.salary) > 50000
 ORDER BY e.emp_no;
  
-create index fn_ln_en on employees (emp_no, first_name, last_name);
+-- Create an index on the ‘emp_no, first_name, last_name’ column of that table, and check if it has sped up the search of the same SELECT statement.
+CREATE INDEX fn_ln_en on employees (emp_no, first_name, last_name);
 
+-- Create a VIEW to extract average salary of department manager
+
+CREATE OR REPLACE VIEW avg_manager_sal AS
+    SELECT 
+        t.title, ROUND(AVG(s.salary), 2)
+    FROM
+        salaries s
+            JOIN
+        dept_manager d ON s.emp_no = d.emp_no
+            JOIN
+        titles t ON t.emp_no = d.emp_no
+    WHERE
+        t.title = 'Manager';
+        
+-- Call the View avg_manager_sal
+
+SELECT * FROM avg_manager_sal;
+
+-- Create a VIEW to calculate total employees of all titles
+
+CREATE OR REPLACE VIEW title_info AS
+    SELECT 
+        t.title, COUNT(e.emp_no) AS total_employees
+    FROM
+        employees e
+            JOIN
+        titles t ON e.emp_no = t.emp_no
+    GROUP BY t.title
+    ORDER BY t.title;
+
+-- Call the View title_info
+
+SELECT * FROM TITLE_INFO;
 
 
 
