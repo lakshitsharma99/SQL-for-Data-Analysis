@@ -4,11 +4,8 @@ Data Exploration using SQL. SQL is the most commonly used data analysis tool for
 
 Check out the analysis at: <a href="https://github.com/lakshitsharma99/SQL-for-Data-Analysis/blob/main/SQL%20for%20Data%20Analysis.sql">MySQL Workbench file</a> (Best View in Desktop Mode) 
 
-
-## Topics covered:
-
-* JOINS, GROUP BY, HAVING, SUBQUERIES, VIEWS, PROCEDURES, FUNCTIONS, ORDER BY, CTE, AGGREGATION FUNCTIONS, WINDOW FUNCTIONS, etc.
-* SQL, MySQL Workbench 
+* Queries covered: JOINS, PROCEDURES, SUBQUERIES, GROUP BY, HAVING, VIEWS, FUNCTIONS, ORDER BY, CTE, AGGREGATION FUNCTIONS, WINDOW FUNCTIONS, etc.
+* Language & Tool: SQL, MySQL Workbench 
 
 ## Info:
 
