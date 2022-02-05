@@ -362,6 +362,8 @@ CREATE OR REPLACE VIEW title_info AS
 
 SELECT * FROM TITLE_INFO;
 
+-- What is salary of employee 10001, 10002 and their titles extract using subqueries
+
 SELECT 
     s.emp_no, ROUND(AVG(s.salary), 2) AS salary, t.title
 FROM
@@ -377,8 +379,26 @@ WHERE
             e.emp_no IN ('10001' , '10002'))
 GROUP BY s.emp_no;
 
+select * from dept_emp;
+select emp_no, count(dept_no) over (partition by dept_no) as ma from dept_emp ; 
 
+select emp_no, max(salary) from salaries group by emp_no;
+select * from dept_emp;
 
+select *,
+row_number() over(partition by dept_no order by emp_no) row_num,
+rank() over(partition by dept_no order by emp_no) row_num,
+dense_rank() over(partition by dept_no order by emp_no) row_num
+from dept_emp;
+
+select * from employees;
+
+select *,
+rank() over(partition by student order by class desc) rnk,
+dense_rank() over(partition by student order by class desc  ) drank from courses;
+ 
+ update courses set student='A' where student='G';
+ select * from courses;
 
 
 
