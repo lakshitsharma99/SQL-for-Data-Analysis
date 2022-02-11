@@ -399,6 +399,23 @@ dense_rank() over(partition by student order by class desc  ) drank from courses
  
  update courses set student='A' where student='G';
  select * from courses;
+ 
+ select e.emp_no, e.first_name, avg(s.salary) from employees e join salaries s on e.emp_no = s.emp_no
+ group by e.emp_no having avg(s.salary) > 60000;
+ 
+ select d.dept_name, avg(salary) as sal from
+departments d
+join dept_emp e on d.dept_no = e.dept_no
+join salaries s on e.emp_no = s.emp_no
+group by d.dept_no
+having sal > 60000;
+update salary set salary=3000
+ where name = 'B';
+select * from salary;
+delete from salary
+ where id = 0;
+insert into salary values(9,'aman','f',1200),(7,'rajat','f',5600);
 
+select * from salary where length(name) - length(replace(name,"a","")) = 2;
 
-
+select * from scores;
