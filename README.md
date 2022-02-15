@@ -7,7 +7,7 @@ Check out the analysis at: <a href="https://github.com/lakshitsharma99/SQL-for-D
 * Queries covered: JOINS, PROCEDURES, SUBQUERIES, GROUP BY, HAVING, VIEWS, FUNCTIONS, ORDER BY, CTE, AGGREGATION FUNCTIONS, WINDOW FUNCTIONS, etc.
 * Language & Tool: SQL, MySQL Workbench 
 
-## Personal:
+## Info:
 
 * Personal Website: <https://lakshitsharma99.github.io/>
 * LinkedIn: <https://www.linkedin.com/in/lakshitsharma99/>
